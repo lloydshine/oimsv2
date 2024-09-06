@@ -8,7 +8,7 @@ export function Topbar({
   open: boolean;
 }) {
   return (
-    <div className="absolute w-full px-6 h-[80px] bg-red-950 text-white flex items-center gap-4 justify-between border-b-2">
+    <div className="absolute w-full px-6 h-[80px] flex items-center gap-4 justify-between border-b-2">
       <div className="flex items-center gap-4 flex-1 md:flex-none">
         <div className="flex items-center gap-4">
           <img src="/logo.png" alt="logo" className="h-10 w-10" />
@@ -18,7 +18,7 @@ export function Topbar({
           type="text"
           name="search"
           id="search"
-          className="px-3 py-1 rounded-full text-black w-[300px] md:block hidden"
+          className="px-3 py-1 rounded-full text-black border-2 w-[300px] md:block hidden"
           placeholder="Search"
         />
       </div>

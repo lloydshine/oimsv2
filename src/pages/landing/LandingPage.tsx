@@ -54,6 +54,20 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+      <section
+        className="text-white py-32 text-center bg-cover bg-top bg-fixed"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.389), rgba(0, 0, 0, 0.573)), url(https://scontent.fcgy1-1.fna.fbcdn.net/v/t39.30808-6/404694883_686060886962631_6396488391550627247_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHLTJ79OJJ4Sb88DtbBwsIUy0r6BUefxy7LSvoFR5_HLlKkmcCQFaZ_p-acnwYzIm3RBgvOhw8eOHbocyKa5fF8&_nc_ohc=i6ioE71M2O8Q7kNvgEJ-GBW&_nc_ht=scontent.fcgy1-1.fna&_nc_gid=Ay_6uCjXBrnGsLWirOOHBDm&oh=00_AYBjv8gL8ajtW6UmA8AtlKrkIDvSAbxmkmojKhVRev5mSg&oe=66E146CF)`,
+        }}
+      >
+        <h2 className="text-4xl font-bold mb-4">Ready to Get Started?</h2>
+        <p className="text-xl mb-6">
+          Join us today and experience the benefits of OSAS.
+        </p>
+        <button className="px-6 py-3 bg-white text-red-950 font-semibold rounded-lg shadow-lg hover:bg-gray-200">
+          Sign Up Now
+        </button>
+      </section>
     </main>
   );
 }
