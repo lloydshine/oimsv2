@@ -18,7 +18,7 @@ export function Sidebar({ open }: { open: boolean }) {
         className={`${position} z-40 fixed md:static transition-all duration-300 w-[18rem] border-r-2 max-h-screen overflow-y-auto flex flex-col bg-red-950 md:bg-white`}
       >
         <section className="p-2">
-          <div className="rounded-lg w-full p-2 border-2 justify-center flex items-center gap-2 bg-slate-200">
+          <div className="rounded-lg w-full p-2 border-2 justify-center flex items-center gap-2">
             <p className="font-bold">{user.assignedLocation}</p>
             <p>{user.role}</p>
           </div>
