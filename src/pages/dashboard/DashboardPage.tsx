@@ -1,6 +1,5 @@
 import { useUser } from "../../providers/UserProvider";
 import { auth } from "../../lib/firebase";
-import { ExternalRole } from "../../lib/globals";
 
 export default function DashboardPage() {
   const { user } = useUser();

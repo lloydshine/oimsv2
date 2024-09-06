@@ -2,11 +2,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { login } from "../lib/user";
+import { login, UserType } from "../lib/user";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
-import { UserType } from "../lib/globals";
 
 const schema = z.object({
   email: z.string().min(10, {

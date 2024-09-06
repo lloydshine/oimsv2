@@ -7,8 +7,7 @@ import {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../lib/firebase";
-import { getUser } from "../lib/user";
-import { User } from "../lib/globals";
+import { getUser, User } from "../lib/user";
 import LoadingPage from "../pages/LoadingPage";
 
 interface UserContextValue {
