@@ -17,10 +17,10 @@ export function Sidebar({ open }: { open: boolean }) {
   );
 }
 
-function UserPanel() {
+export function UserPanel() {
   return <section></section>;
 }
 
-function DepartmentPanel() {
+export function DepartmentPanel() {
   return <section></section>;
 }
