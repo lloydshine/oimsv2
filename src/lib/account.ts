@@ -4,7 +4,7 @@ import {
 } from "firebase/auth";
 import { auth, db } from "./firebase";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
-import { User } from "./globals";
+import { Account, Department, User } from "./globals";
 
 export const login = async (email: string, password: string) => {
   try {
@@ -33,22 +33,12 @@ export const register = async (email: string, password: string) => {
   }
 };
 
-export const createUser = async (
-  id: string,
-  firstName: string,
-  middleName: string,
-  lastName: string,
-  contactNumber: string
-) => {
+export const createAccount = async (id: string, accountType: string) => {
   try {
-    await setDoc(doc(db, "users", id), {
-      firstName,
-      middleName,
-      lastName,
-      contactNumber,
-      imageUrl: "",
-      organizationId: "",
-      dateJoined: serverTimestamp(),
+    await setDoc(doc(db, "accounts", id), {
+      accountType,
+      onBoarded: false,
+      dateCreated: serverTimestamp(),
     });
   } catch (error) {
     if (error instanceof Error) {
@@ -58,20 +48,55 @@ export const createUser = async (
   }
 };
 
-export const getUser = async (id: string): Promise<User | null> => {
+export const getAccount = async (id: string): Promise<Account | null> => {
   try {
-    const userDoc = await getDoc(doc(db, "users", id));
+    const userDoc = await getDoc(doc(db, "accounts", id));
     if (userDoc.exists()) {
       return {
         id: userDoc.id,
         ...userDoc.data(),
-      } as User;
+      } as Account;
     } else {
       return null;
     }
   } catch (e) {
     // Handle any errors
     console.error("Error fetching user:", e);
+    return null;
+  }
+};
+
+export const getAccountData = async (
+  id: string,
+  accountType: string // Use literal types to restrict to these values
+): Promise<User | Department | null> => {
+  try {
+    const docRef = doc(
+      db,
+      accountType === "User" ? "users" : "departments",
+      id
+    );
+    const dataDoc = await getDoc(docRef);
+
+    if (dataDoc.exists()) {
+      const data = dataDoc.data();
+
+      if (accountType === "User") {
+        return {
+          id: dataDoc.id,
+          ...data,
+        } as User;
+      } else {
+        return {
+          id: dataDoc.id,
+          ...data,
+        } as Department;
+      }
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.error("Error fetching account data:", e);
     return null;
   }
 };

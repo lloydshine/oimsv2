@@ -19,8 +19,6 @@ export default function Footer() {
               Your one-stop solution for student management.
             </p>
           </div>
-
-          {/* Navigation Links */}
           <div className="flex w-full md:w-max items-center flex-col md:flex-row md:gap-8 text-center md:text-left">
             <Link to="/about" className="hover:underline mb-2 md:mb-0">
               About Us

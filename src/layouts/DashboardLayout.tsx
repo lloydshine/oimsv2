@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { UserProvider } from "../providers/UserProvider";
+import { AccountProvider } from "../providers/AccountProvider";
 import { Topbar } from "../components/dashboard/Topbar";
 import { Sidebar } from "../components/dashboard/Sidebar";
 import { useState } from "react";
@@ -11,7 +11,7 @@ export default function DashboardLayout() {
   };
 
   return (
-    <UserProvider>
+    <AccountProvider>
       <main>
         <Topbar handleToggle={handleToggle} open={open} />
         <section className="h-screen flex pt-20 pb-5">
@@ -21,6 +21,6 @@ export default function DashboardLayout() {
           </div>
         </section>
       </main>
-    </UserProvider>
+    </AccountProvider>
   );
 }

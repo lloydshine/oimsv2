@@ -2,8 +2,8 @@ export default function LandingPage() {
   return (
     <main className="bg-gray-100 min-h-screen flex flex-col">
       <section className="bg-red-950 text-white text-center py-20 flex-1">
-        <h1 className="text-9xl font-bold">OSAS</h1>
-        <p className="text-2xl mt-4">
+        <h1 className="text-6xl md:text-9xl font-bold">OSAS</h1>
+        <p className="text-lg md:text-2xl mt-4">
           Empowering Student Success and Well-being
         </p>
         <button className="mt-8 px-6 py-3 bg-white text-red-950 font-semibold rounded-lg shadow-lg hover:bg-gray-200">
@@ -50,6 +50,13 @@ export default function LandingPage() {
             <p className="text-gray-700">
               Efficiently handle department students, penalties, events and
               attendance all in one place.
+            </p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h3 className="text-2xl font-semibold mb-4">Career Guidance</h3>
+            <p className="text-gray-700">
+              Notify OJT and Graduating Students for job oppurtunities and
+              seminars.
             </p>
           </div>
         </div>
