@@ -17,6 +17,7 @@ export interface Department {
   shortName: string;
   description: string;
   imageUrl?: string;
+  color: string;
 }
 
 export interface Account {

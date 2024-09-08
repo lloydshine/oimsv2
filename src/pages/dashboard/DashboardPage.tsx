@@ -1,23 +1,27 @@
-import { auth } from "../../lib/firebase";
 import { useAccount } from "../../providers/AccountProvider";
+import { useDepartment } from "../../providers/DepartmentProvider";
 import { useUser } from "../../providers/UserProvider";
 
 export default function DashboardPage() {
-  const { user } = useUser();
   const { account } = useAccount();
+  if (account.accountType == "User") return <UserDashboard />;
+  return <DepartmentDashboard />;
+}
 
+function UserDashboard() {
+  const { user } = useUser();
   return (
-    <div>
-      DashboardPage
+    <main>
       <pre>{JSON.stringify(user, null, 2)}</pre>
-      <pre>{JSON.stringify(account, null, 2)}</pre>
-      <pre className="max-w-[50rem]"></pre>
-      <button
-        onClick={() => auth.signOut()}
-        className="bg-red-950 text-white rounded-lg px-4 py-2 border-2 mt-auto hover:bg-white hover:text-red-950 transition-colors"
-      >
-        Signout
-      </button>
-    </div>
+    </main>
+  );
+}
+
+function DepartmentDashboard() {
+  const { department } = useDepartment();
+  return (
+    <main>
+      <pre>{JSON.stringify(department, null, 2)}</pre>
+    </main>
   );
 }

@@ -51,7 +51,6 @@ export function AccountProvider({ children }: { children: ReactNode }) {
 
   if (loading) return <LoadingPage />;
   if (!account) return;
-  if (account?.onBoarded) return <OnboardingPage />;
 
   // Choose between UserProvider and DepartmentProvider based on account type
   return (
