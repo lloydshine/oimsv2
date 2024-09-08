@@ -26,3 +26,15 @@ export interface Account {
   accountType: string;
   dateCreated: Timestamp;
 }
+
+export interface Equipment {
+  id: string;
+  name: string;
+  brand: string;
+  quantity: number;
+  isAvailable: boolean;
+  imageUrl: string;
+  price: number;
+  dateBought: string;
+  dateAdded: Timestamp;
+}
