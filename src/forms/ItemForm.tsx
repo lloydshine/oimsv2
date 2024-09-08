@@ -4,7 +4,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import toast from "react-hot-toast";
 import { Equipment } from "../lib/globals";
-import { createEquipment, updateEquipment } from "../lib/equipment";
+import {
+  createEquipment,
+  deleteEquipment,
+  updateEquipment,
+} from "../lib/equipment";
 import {
   deleteObject,
   getDownloadURL,
@@ -50,6 +54,7 @@ export function ItemForm({
     },
   });
   const [loading, setLoading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(
     equipment?.imageUrl ? equipment.imageUrl : null
@@ -77,12 +82,6 @@ export function ItemForm({
 
       // Upload the new image to Firebase Storage
       try {
-        // Upload the new image to Firebase Storage
-        const imageRef = ref(storage, `equipments/${data.name}`);
-        const uploadResult = await uploadBytes(imageRef, image);
-        uploadedImageUrl = await getDownloadURL(uploadResult.ref);
-        setImageUrl(uploadedImageUrl); // Set the uploaded image URL
-
         // Delete the old image if it exists
         if (equipment?.imageUrl) {
           const oldImageRef = ref(storage, `equipments/${data.name}`);
@@ -94,6 +93,11 @@ export function ItemForm({
             toast.error("Failed to delete the old image. Please try again.");
           }
         }
+        // Upload the new image to Firebase Storage
+        const imageRef = ref(storage, `equipments/${data.name}`);
+        const uploadResult = await uploadBytes(imageRef, image);
+        uploadedImageUrl = await getDownloadURL(uploadResult.ref);
+        setImageUrl(uploadedImageUrl); // Set the uploaded image URL
       } catch (error) {
         console.error("Error handling image:", error);
         toast.error("Failed to upload the image. Please try again.");
@@ -119,6 +123,28 @@ export function ItemForm({
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDelete = (e: any) => {
+    e.preventDefault();
+    if (!equipment) return;
+    setDeleting(true);
+    toast
+      .promise(deleteEquipment(equipment.id), {
+        loading: "Deleting...",
+        success: <b>Delete successful!</b>,
+        error: <b>Login failed. Please try again.</b>,
+      })
+      .then(() => {
+        revalidate();
+        toggleModdal();
+      })
+      .catch((error) => {
+        console.error("Toast error:", error);
+      })
+      .finally(() => {
+        setDeleting(false);
+      });
   };
 
   return (
@@ -218,13 +244,28 @@ export function ItemForm({
         />
       </div>
 
-      <div className="flex items-center justify-end">
+      <div className="flex items-center justify-end gap-4">
+        {equipment && (
+          <button
+            className="border-red-600 text-red-600 border-2 px-6 py-2 rounded-lg"
+            onClick={handleDelete}
+            disabled={loading}
+          >
+            {deleting ? "Deleting..." : "Delete"}
+          </button>
+        )}
         <button
-          className="px-6 py-3 bg-red-950 text-white rounded-lg"
+          className="px-6 py-2 bg-red-950 text-white rounded-lg"
           type="submit"
           disabled={loading}
         >
-          {loading ? "Submitting..." : "Submit"}
+          {loading
+            ? equipment
+              ? "Updating..."
+              : "Creating..."
+            : equipment
+            ? "Update"
+            : "Create"}
         </button>
       </div>
     </form>

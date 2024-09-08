@@ -38,3 +38,12 @@ export interface Equipment {
   dateBought: string;
   dateAdded: Timestamp;
 }
+
+export interface SchoolEvent {
+  id: string;
+  name: string;
+  description: string;
+  departmentId: string | null;
+  startTime: Date;
+  endTime: Date;
+}

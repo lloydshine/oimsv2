@@ -66,7 +66,7 @@ export const updateEquipment = async (
 
 export const deleteEquipment = async (id: string): Promise<void> => {
   try {
-    const equipmentRef = doc(db, "inventory", id);
+    const equipmentRef = doc(db, "equipments", id);
     await deleteDoc(equipmentRef);
     console.log("Equipment deleted successfully!");
   } catch (error) {

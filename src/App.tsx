@@ -6,6 +6,7 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import DashboardPage from "./pages/dashboard/DashboardPage";
 import LoginPage from "./pages/auth/LoginPage";
 import EquipmentsPage from "./pages/dashboard/EquipmentsPage";
+import EventsPage from "./pages/dashboard/EventsPage";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/dashboard/equipments" element={<EquipmentsPage />} />
+            <Route path="/dashboard/events" element={<EventsPage />} />
           </Route>
         </Routes>
       </HashRouter>
