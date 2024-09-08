@@ -145,7 +145,8 @@ export function DepartmentPanel() {
   return (
     <section>
       <div
-        className={`flex m-2 items-center justify-center rounded-md border-2 p-2 ${department.color}`}
+        className={`flex m-2 items-center justify-center rounded-md border-2 p-2`}
+        style={{ backgroundColor: department.color }}
       >
         <h1 className="text-white font-bold">{department.shortName}</h1>
       </div>
