@@ -39,6 +39,25 @@ export interface Equipment {
   dateAdded: Timestamp;
 }
 
+export interface EquipmentRequest {
+  id: string; // Unique ID for the request
+  eventId?: string;
+  departmentId: string;
+  dateClaimed: Timestamp;
+  dateToBeReturned: Timestamp;
+  dateReturned?: Timestamp;
+  requestStatus: string;
+}
+
+export interface RequestedEquipment {
+  id: string;
+  requestId: string;
+  equipmentId: string;
+  quantity: number;
+  returnStatus: string;
+  dateReturned?: Timestamp;
+}
+
 export interface SchoolEvent {
   id: string;
   name: string;

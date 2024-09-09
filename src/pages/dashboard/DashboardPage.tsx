@@ -13,7 +13,6 @@ function UserDashboard() {
   const { user } = useUser();
   return (
     <div className="p-6 space-y-6">
-      {/* Header */}
       <header className="flex items-center justify-between p-4 bg-red-950 text-white rounded-lg shadow-md">
         <div className="flex items-center space-x-4">
           <img
@@ -28,8 +27,6 @@ function UserDashboard() {
           </div>
         </div>
       </header>
-
-      {/* Dashboard Sections */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <h2 className="text-lg font-semibold">Manage Departments</h2>
@@ -41,7 +38,6 @@ function UserDashboard() {
             Go to Manage Departments
           </Link>
         </div>
-
         <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <h2 className="text-lg font-semibold">Manage Students</h2>
           <p className="mt-2 text-gray-600">View and manage student records.</p>
@@ -52,7 +48,6 @@ function UserDashboard() {
             Go to Manage Students
           </Link>
         </div>
-
         <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <h2 className="text-lg font-semibold">Event Requests</h2>
           <p className="mt-2 text-gray-600">
@@ -65,7 +60,6 @@ function UserDashboard() {
             Go to Event Requests
           </Link>
         </div>
-
         <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <h2 className="text-lg font-semibold">Equipment Requests</h2>
           <p className="mt-2 text-gray-600">
@@ -101,7 +95,6 @@ function DepartmentDashboard() {
   const { department } = useDepartment();
   return (
     <div className="p-6 space-y-6">
-      {/* Header */}
       <header
         className={`flex items-center justify-between p-4 text-white rounded-lg shadow-md`}
         style={{ backgroundColor: department.color }}
@@ -118,10 +111,7 @@ function DepartmentDashboard() {
           </div>
         </div>
       </header>
-
-      {/* Dashboard Sections */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Events Management */}
         <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <h2 className="text-lg font-semibold">Events Management</h2>
           <p className="mt-2 text-gray-600">Manage and review all events.</p>
@@ -144,8 +134,6 @@ function DepartmentDashboard() {
             Go to Student Management
           </Link>
         </div>
-
-        {/* Student Penalties */}
         <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <h2 className="text-lg font-semibold">Student Penalties</h2>
           <p className="mt-2 text-gray-600">
@@ -158,8 +146,6 @@ function DepartmentDashboard() {
             Go to Student Penalties
           </Link>
         </div>
-
-        {/* Event Attendance */}
         <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <h2 className="text-lg font-semibold">Event Attendance</h2>
           <p className="mt-2 text-gray-600">
@@ -172,8 +158,6 @@ function DepartmentDashboard() {
             Go to Event Attendance
           </Link>
         </div>
-
-        {/* Department Management */}
         <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <h2 className="text-lg font-semibold">Department Management</h2>
           <p className="mt-2 text-gray-600">
@@ -186,8 +170,6 @@ function DepartmentDashboard() {
             Go to Department Management
           </Link>
         </div>
-
-        {/* Equipment Requests */}
         <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <h2 className="text-lg font-semibold">Equipment Requests</h2>
           <p className="mt-2 text-gray-600">
@@ -200,8 +182,6 @@ function DepartmentDashboard() {
             Go to Equipment Requests
           </Link>
         </div>
-
-        {/* Event Requests */}
         <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <h2 className="text-lg font-semibold">Event Requests</h2>
           <p className="mt-2 text-gray-600">

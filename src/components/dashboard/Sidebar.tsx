@@ -208,7 +208,7 @@ export function DepartmentPanel() {
           <p>Events</p>
         </Link>
         <Link
-          to="/dashboard/equipments"
+          to="/dashboard/equipments/request"
           className={`p-4 flex items-center gap-4 hover:bg-gray-100 ${
             isActiveLink(currentPath, "/dashboard/equipments")
               ? "text-red-950 font-semibold"
