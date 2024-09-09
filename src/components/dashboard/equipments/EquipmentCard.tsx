@@ -4,7 +4,7 @@ import { AvailabilityBadge } from "../../AvailabilityBadge";
 export function EquipmentCard({ equipment }: { equipment: Equipment }) {
   return (
     <div
-      className="w-[250px] h-[300px] flex items-end rounded-lg relative"
+      className="w-[250px] h-[300px] flex items-end rounded-lg relative drop-shadow-lg bg-inherit"
       style={{
         background: `linear-gradient(rgba(0, 0, 0, 0.289), rgba(0, 0, 0, 0.673)), url('${equipment.imageUrl}') no-repeat center center / cover`,
       }}

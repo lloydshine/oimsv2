@@ -18,7 +18,7 @@ export function Modal({
       <div className="relative w-full md:w-[50rem] h-full max-h-full md:h-[40rem] px-5 py-10  rounded-lg bg-white">
         <X onClick={toggleModal} className="absolute top-0 right-0 m-4" />
         <section className="max-h-full h-full overflow-y-auto p-5">
-          <h1 className="font-semibold mb-5">{title}</h1>
+          <h1 className="font-semibold mb-5 text-2xl">{title}</h1>
           {children}
         </section>
       </div>
