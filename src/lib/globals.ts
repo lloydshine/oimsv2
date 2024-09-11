@@ -1,5 +1,15 @@
 import { Timestamp } from "firebase/firestore";
 
+export interface Notification {
+  id: string;
+  toId: string;
+  fromId?: string;
+  dateNotified: Timestamp;
+  message: string;
+  link: string;
+  viewed: boolean;
+}
+
 export interface User {
   id: string;
   firstName: string;
@@ -67,4 +77,23 @@ export interface SchoolEvent {
   endTime: Timestamp;
   status: string;
   requestId: string;
+}
+
+export interface Student {
+  studentId: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  email: string;
+  contactNumber: string;
+  departmentId: string;
+  programId: string;
+}
+
+export interface Admission {
+  id: string;
+  studentId: string;
+  fileUrls: [type: string, imageUrl: string];
+  status: string;
+  dateSubmitted: string;
 }

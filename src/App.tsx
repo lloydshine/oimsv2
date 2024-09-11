@@ -14,6 +14,7 @@ import EquipmentsLayout from "./layouts/EquipmentsLayout";
 import RequestLayout from "./layouts/RequestLayout";
 import AdmissionRequestPage from "./pages/request/AdmissionRequestPage";
 import AdmissionPage from "./pages/dashboard/AdmissionPage";
+import AdmissionLandingPage from "./pages/landing/AdmissionLandingPage";
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<LandingLayout />}>
             <Route index element={<LandingPage />} />
+            <Route path="admission" element={<AdmissionLandingPage />} />
           </Route>
           <Route path="request" element={<RequestLayout />}>
             <Route path="admission" element={<AdmissionRequestPage />} />

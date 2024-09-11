@@ -14,7 +14,7 @@ export default function DashboardLayout() {
     <AccountProvider>
       <main>
         <Topbar handleToggle={handleToggle} open={open} />
-        <section className="h-screen flex pt-20 pb-5">
+        <section className="h-screen flex md:pt-[78px] pt-[70px] pb-5">
           <Sidebar open={open} />
           <div className="flex-1 flex max-h-screen overflow-y-auto p-10">
             <Outlet />

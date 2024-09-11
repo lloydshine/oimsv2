@@ -47,6 +47,8 @@ export default function EventPage() {
   if (!event)
     return <p className="text-center text-red-600">Event not found.</p>;
 
+  console.log(new Date(event.endTime.toString()));
+
   return (
     <main className="w-full space-y-10">
       <section>

@@ -1,4 +1,5 @@
 import { Code2Icon, File, MenuIcon, X } from "lucide-react";
+import { Notifications } from "./Notifications";
 
 export function Topbar({
   handleToggle,
@@ -33,11 +34,14 @@ export function Topbar({
             <h1>Documentation</h1>
           </div>
         </div>
-        <div className="w-10 h-10 rounded-full text-white bg-red-950 flex items-center justify-center">
-          <p>LS</p>
-        </div>
-        <div className="md:hidden" onClick={() => handleToggle(!open)}>
-          {open ? <X /> : <MenuIcon />}
+        <div className="flex items-center gap-4">
+          <Notifications />
+          <div className="w-10 h-10 rounded-full text-white bg-red-950 flex items-center justify-center">
+            <p>LS</p>
+          </div>
+          <div className="md:hidden" onClick={() => handleToggle(!open)}>
+            {open ? <X /> : <MenuIcon />}
+          </div>
         </div>
       </div>
     </div>

@@ -53,8 +53,8 @@ export function EventForm({
       name: event?.name || "",
       description: event?.description || "",
       departmentId: defaultDepartmentId || event?.departmentId || null,
-      startTime: event?.startTime ? new Date(event.startTime) : undefined,
-      endTime: event?.endTime ? new Date(event.endTime) : undefined,
+      startTime: event?.startTime ? event.startTime.toDate() : undefined,
+      endTime: event?.endTime ? event.endTime.toDate() : undefined,
     },
   });
 
@@ -71,13 +71,12 @@ export function EventForm({
   }, [defaultDepartmentId, setValue]);
 
   useEffect(() => {
-    // Reset the form values when event changes
     reset({
       name: event?.name || "",
       description: event?.description || "",
       departmentId: defaultDepartmentId || event?.departmentId || null,
-      startTime: event?.startTime ? new Date(event.startTime) : undefined,
-      endTime: event?.endTime ? new Date(event.endTime) : undefined,
+      startTime: event?.startTime ? event.startTime.toDate() : undefined,
+      endTime: event?.endTime ? event.endTime.toDate() : undefined,
     });
   }, [event, defaultDepartmentId, reset]);
 
