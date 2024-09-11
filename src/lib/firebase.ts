@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { doc, getFirestore, updateDoc } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
@@ -17,3 +17,18 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+
+export const updateStatus = async (
+  id: string,
+  collection: string,
+  status: string
+): Promise<void> => {
+  try {
+    const ref = doc(db, collection, id);
+    await updateDoc(ref, { status });
+    console.log("Document updated successfully!");
+  } catch (error) {
+    console.error("Error updating document:", error);
+    throw error;
+  }
+};

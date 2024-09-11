@@ -23,6 +23,7 @@ export const createEvent = async (data: EventFormData): Promise<void> => {
       departmentId: data.departmentId,
       startTime: data.startTime,
       endTime: data.endTime,
+      hasEquipmentRequest: false,
       dateCreated: serverTimestamp(),
     });
     console.log("Event created successfully!");

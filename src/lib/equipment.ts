@@ -5,12 +5,15 @@ import {
   doc,
   getDoc,
   getDocs,
+  query,
   serverTimestamp,
   updateDoc,
+  where,
 } from "firebase/firestore";
-import { Equipment } from "./globals";
+import { Equipment, EquipmentRequest } from "./globals";
 import { db } from "./firebase";
 import { ItemFormData } from "../forms/ItemForm";
+import { EquipmentRequestData } from "../forms/EquipmentRequestForm";
 
 export const createEquipment = async (
   data: ItemFormData,
@@ -79,11 +82,78 @@ export const getEquipmentById = async (
   id: string
 ): Promise<Equipment | null> => {
   try {
-    const equipmentRef = doc(db, "inventory", id);
+    const equipmentRef = doc(db, "equipments", id);
     const docSnap = await getDoc(equipmentRef);
 
     if (docSnap.exists()) {
       return { id: docSnap.id, ...docSnap.data() } as Equipment;
+    } else {
+      console.log("No such equipment found!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching equipment by ID:", error);
+    throw error;
+  }
+};
+
+export const getAvailableEquipments = async (): Promise<Equipment[]> => {
+  try {
+    // Query to get documents where isAvailable is true
+    const q = query(
+      collection(db, "equipments"),
+      where("isAvailable", "==", true)
+    );
+    const querySnapshot = await getDocs(q);
+    // Map the results to an array of equipment
+    const items = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...(doc.data() as object),
+    }));
+    return items as Equipment[];
+  } catch (error) {
+    console.error("Error fetching available equipments:", error);
+    return [];
+  }
+};
+
+export const createEquipmentRequest = async (data: EquipmentRequestData) => {
+  try {
+    const ref = await addDoc(collection(db, "equipmentRequests"), {
+      eventId: data.eventId,
+      departmentId: data.departmentId,
+      status: "Pending",
+      dateRequested: serverTimestamp(),
+      dateClaimed: null,
+      dateToBeReturned: null,
+      requestedEquipments: data.requestedEquipments.map((item) => ({
+        ...item,
+        isReturned: false,
+        dateReturned: null,
+      })),
+    });
+    if (data.eventId) {
+      await updateDoc(doc(db, "events", data.eventId), {
+        requestId: ref.id,
+      });
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("An unknown error occurred.");
+  }
+};
+
+export const getEventEquipmentRequest = async (
+  id: string
+): Promise<EquipmentRequest | null> => {
+  try {
+    const equipmentRef = doc(db, "equipmentRequests", id);
+    const docSnap = await getDoc(equipmentRef);
+
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() } as EquipmentRequest;
     } else {
       console.log("No such equipment found!");
       return null;

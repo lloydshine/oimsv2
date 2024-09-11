@@ -17,7 +17,7 @@ export function StatusBadge({ status }: { status: string }) {
       break;
     default:
       bgColor = "bg-blue-600";
-      textColor = "text-primary-foreground";
+      textColor = "text-white";
       break;
   }
 

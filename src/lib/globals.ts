@@ -44,17 +44,17 @@ export interface EquipmentRequest {
   eventId?: string;
   departmentId: string;
   dateClaimed: Timestamp;
-  dateToBeReturned: Timestamp;
-  dateReturned?: Timestamp;
-  requestStatus: string;
+  dateRequested: Timestamp;
+  dateToBeReturned: Date;
+  dateReturned?: Date;
+  status: string;
+  requestedEquipments: RequestedEquipment[];
 }
 
 export interface RequestedEquipment {
-  id: string;
-  requestId: string;
   equipmentId: string;
   quantity: number;
-  returnStatus: string;
+  isReturned: string;
   dateReturned?: Timestamp;
 }
 
@@ -66,4 +66,5 @@ export interface SchoolEvent {
   startTime: Date;
   endTime: Date;
   status: string;
+  requestId: string;
 }

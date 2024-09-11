@@ -1,12 +1,18 @@
 // @ts-nocheck
 
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { SchoolEvent } from "../../lib/globals";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate, Link } from "react-router-dom";
+import { getEventEquipmentRequest } from "../../lib/equipment";
 import { getEventById } from "../../lib/events";
+import { SchoolEvent, EquipmentRequest } from "../../lib/globals";
+import { StatusBadge } from "../../components/StatusBadge";
+import { RequestedEquipmentCard } from "../../components/dashboard/equipments/RequestedEquipmentCard";
+import { updateStatus } from "../../lib/firebase";
+import { useAccount } from "../../providers/AccountProvider";
 
 export default function EventPage() {
   const [event, setEvent] = useState<SchoolEvent | null>(null);
+  const [request, setRequest] = useState<EquipmentRequest | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -15,72 +21,136 @@ export default function EventPage() {
   const query = new URLSearchParams(location.search);
   const id = query.get("id");
 
-  useEffect(() => {
-    const fetchEvent = async () => {
-      if (id) {
-        try {
-          const event = await getEventById(id);
-          setEvent(event);
-        } catch (err) {
-          setError("Failed to load event.");
-        } finally {
-          setLoading(false);
+  const { account } = useAccount();
+  const fetchEvent = async () => {
+    if (id) {
+      try {
+        const event = await getEventById(id);
+        if (event?.requestId) {
+          const request = await getEventEquipmentRequest(event.requestId);
+          setRequest(request);
         }
-      } else {
-        setError("No event ID provided.");
+        setEvent(event);
+      } catch (err) {
+        setError("Failed to load event.");
+      } finally {
         setLoading(false);
       }
-    };
-
+    } else {
+      setError("No event ID provided.");
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchEvent();
   }, [id]);
 
   if (loading) return <p className="text-center text-gray-600">Loading...</p>;
   if (error) return <p className="text-center text-red-600">{error}</p>;
+  if (!event)
+    return <p className="text-center text-red-600">Event not found.</p>;
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-4 text-blue-500 hover:underline flex items-center"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-4 h-4 mr-2"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M15 19l-7-7 7-7" />
-        </svg>
-        Back
-      </button>
-
-      {/* Event Details */}
-      {event ? (
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h1 className="text-2xl font-bold mb-2">{event.name}</h1>
-          <p className="text-gray-700 mb-4">{event.description}</p>
-          <div className="mb-2">
-            <p className="font-semibold">Start Time:</p>
-            <p>{new Date(event.startTime.seconds * 1000).toLocaleString()}</p>
-          </div>
-          <div className="mb-2">
-            <p className="font-semibold">End Time:</p>
-            <p>{new Date(event.endTime.seconds * 1000).toLocaleString()}</p>
-          </div>
-          <div>
-            <p className="font-semibold">Department ID:</p>
-            <p>{event.departmentId}</p>
-          </div>
-          {/* Add more event details as needed */}
+    <main className="w-full space-y-10">
+      <section>
+        <div className="flex items-center gap-2">
+          <h1 className="text-2xl font-bold">{event.name}</h1>
+          <StatusBadge status={event.status} />
         </div>
-      ) : (
-        <p className="text-center text-gray-600">Event not found.</p>
+        <p>{event.description}</p>
+        <p className="text-sm text-gray-500">
+          Start: {new Date(event.startTime.seconds * 1000).toLocaleString()}{" "}
+          <br />
+          End: {new Date(event.endTime.seconds * 1000).toLocaleString()}
+        </p>
+      </section>
+      <section>
+        {request ? (
+          <div className="space-y-6">
+            <div className="flex items-center gap-4">
+              <h1 className="font-semibold">Requested Equipments</h1>
+              <StatusBadge status={request.status} />
+            </div>
+            <div className="w-full flex flex-wrap gap-4">
+              {request.requestedEquipments.map((eq) => (
+                <RequestedEquipmentCard
+                  requestedEquipment={eq}
+                  key={eq.equipmentId}
+                />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <button className="px-4 py-2 bg-red-950 text-white rounded-lg">
+            <Link to={`/dashboard/equipments/request?eventId=${event.id}`}>
+              Request Sport Equipments
+            </Link>
+          </button>
+        )}
+      </section>
+      {account.accountType == "User" && (
+        <UserPanel event={event} request={request} revalidate={fetchEvent} />
       )}
-    </div>
+    </main>
+  );
+}
+
+function UserPanel({
+  event,
+  request,
+  revalidate,
+}: {
+  event: SchoolEvent;
+  request: EquipmentRequest;
+  revalidate: () => void;
+}) {
+  return (
+    <main className="space-x-5">
+      <button
+        className="px-4 py-2 bg-red-950 text-white rounded-lg"
+        onClick={() => {
+          updateStatus(event.id, "events", "Approved");
+          revalidate();
+        }}
+      >
+        Approve Event
+      </button>
+      <button
+        className="px-4 py-2 bg-red-950 text-white rounded-lg"
+        onClick={() => {
+          updateStatus(event.id, "events", "Declined");
+          revalidate();
+        }}
+      >
+        Decline Event
+      </button>
+      <button
+        className="px-4 py-2 bg-red-950 text-white rounded-lg"
+        onClick={() => {
+          updateStatus(request.id, "equipmentRequests", "Approved");
+          revalidate();
+        }}
+      >
+        Approve Equipment Request
+      </button>
+      <button
+        className="px-4 py-2 bg-red-950 text-white rounded-lg"
+        onClick={() => {
+          updateStatus(request.id, "equipmentRequests", "Declined");
+          revalidate();
+        }}
+      >
+        Decline Equipment Request
+      </button>
+      <button
+        className="px-4 py-2 bg-red-950 text-white rounded-lg"
+        onClick={() => {
+          updateStatus(event.id, "events", "Completed");
+          revalidate();
+        }}
+      >
+        Mark Event Completed
+      </button>
+    </main>
   );
 }
