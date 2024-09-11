@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { useEffect, useState } from "react";
 import { Department, SchoolEvent } from "../../../lib/globals";
 import { getAccountData } from "../../../lib/account";
@@ -49,9 +47,8 @@ export function EventCard({ event }: { event: SchoolEvent }) {
         <p className="font-semibold">{event.name}</p>
         <p>{event.description}</p>
         <p className="text-sm text-gray-500">
-          Start: {new Date(event.startTime.seconds * 1000).toLocaleString()}{" "}
-          <br />
-          End: {new Date(event.endTime.seconds * 1000).toLocaleString()}
+          Start: {event.startTime.toDate().toLocaleString()} <br />
+          End: {event.endTime.toDate().toLocaleString()}
         </p>
       </div>
     </div>

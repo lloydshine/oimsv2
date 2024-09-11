@@ -9,9 +9,11 @@ import { useAccount } from "../../providers/AccountProvider";
 
 export default function EquipmentRequestPage() {
   const { account } = useAccount();
-
-  if (account.accountType == "User") return <UserEquipmentRequestPage />;
-  return <DepartmentEquipmentRequestPage />;
+  return account.accountType === "User" ? (
+    <UserEquipmentRequestPage />
+  ) : (
+    <DepartmentEquipmentRequestPage />
+  );
 }
 
 function DepartmentEquipmentRequestPage() {
@@ -23,24 +25,33 @@ function DepartmentEquipmentRequestPage() {
   const [loading, setLoading] = useState(true);
   const { department } = useDepartment();
 
-  if (!eventId) return <EquipmentRequestForm departmentId={department.id} />;
-
   useEffect(() => {
     const fetchEvent = async () => {
-      const event = await getEventById(eventId);
-      setEvent(event);
-      setLoading(false);
+      if (eventId) {
+        try {
+          const eventData = await getEventById(eventId);
+          setEvent(eventData);
+        } catch (error) {
+          console.error("Failed to fetch event:", error);
+          setEvent(null);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+      }
     };
+
     fetchEvent();
-  }, []);
+  }, [eventId]);
 
   if (loading) return <Loading />;
-  if (!event) return <>Event not found</>;
+  if (!event && eventId) return <>Event not found</>;
 
   return (
     <main>
-      <h1>For {event.name}</h1>
-      <EquipmentRequestForm eventId={event.id} departmentId={department.id} />
+      <h1>{eventId ? `For ${event?.name}` : "Request Equipment"}</h1>
+      <EquipmentRequestForm eventId={event?.id} departmentId={department.id} />
     </main>
   );
 }
@@ -53,24 +64,33 @@ function UserEquipmentRequestPage() {
   const [event, setEvent] = useState<SchoolEvent | null>(null);
   const [loading, setLoading] = useState(true);
 
-  if (!eventId) return <EquipmentRequestForm />;
-
   useEffect(() => {
     const fetchEvent = async () => {
-      const event = await getEventById(eventId);
-      setEvent(event);
-      setLoading(false);
+      if (eventId) {
+        try {
+          const eventData = await getEventById(eventId);
+          setEvent(eventData);
+        } catch (error) {
+          console.error("Failed to fetch event:", error);
+          setEvent(null);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+      }
     };
+
     fetchEvent();
-  }, []);
+  }, [eventId]);
 
   if (loading) return <Loading />;
-  if (!event) return <>Event not found</>;
+  if (!event && eventId) return <>Event not found</>;
 
   return (
     <main>
-      <h1>For {event.name}</h1>
-      <EquipmentRequestForm eventId={event.id} />
+      <h1>{eventId ? `For ${event?.name}` : "Request Equipment"}</h1>
+      <EquipmentRequestForm eventId={event?.id} />
     </main>
   );
 }

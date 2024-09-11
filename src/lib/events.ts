@@ -23,8 +23,8 @@ export const createEvent = async (data: EventFormData): Promise<void> => {
       departmentId: data.departmentId,
       startTime: data.startTime,
       endTime: data.endTime,
-      hasEquipmentRequest: false,
       dateCreated: serverTimestamp(),
+      status: "Pending",
     });
     console.log("Event created successfully!");
   } catch (error) {

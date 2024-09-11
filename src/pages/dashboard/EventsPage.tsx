@@ -14,10 +14,9 @@ export default function EventsPage() {
   const params = useParams();
   const query = new URLSearchParams(location.search);
   const id = query.get("id");
-  // Check for ID in URL path (for route parameters)
   const urlId = params.id;
   if (id || urlId) {
-    return <EventPage />; // Render EventPage if there's an ID in the query parameters or URL
+    return <EventPage />;
   }
   if (account.accountType === "Department") {
     return <DepartmentEvents />;

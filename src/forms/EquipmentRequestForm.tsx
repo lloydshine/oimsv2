@@ -17,7 +17,7 @@ interface EquipmentRequestFormProps {
 }
 
 const schema = z.object({
-  departmentId: z.string(),
+  departmentId: z.string().optional(),
   eventId: z.string().optional(),
   requestedEquipments: z
     .array(

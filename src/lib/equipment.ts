@@ -120,8 +120,8 @@ export const getAvailableEquipments = async (): Promise<Equipment[]> => {
 export const createEquipmentRequest = async (data: EquipmentRequestData) => {
   try {
     const ref = await addDoc(collection(db, "equipmentRequests"), {
-      eventId: data.eventId,
-      departmentId: data.departmentId,
+      eventId: data.eventId || null,
+      departmentId: data.departmentId || null,
       status: "Pending",
       dateRequested: serverTimestamp(),
       dateClaimed: null,

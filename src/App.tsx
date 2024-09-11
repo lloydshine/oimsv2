@@ -11,6 +11,9 @@ import EventCreatePage from "./pages/dashboard/EventCreatePage";
 import EventsLayout from "./layouts/EventsLayout";
 import EquipmentRequestPage from "./pages/request/EquipmentRequestPage";
 import EquipmentsLayout from "./layouts/EquipmentsLayout";
+import RequestLayout from "./layouts/RequestLayout";
+import AdmissionRequestPage from "./pages/request/AdmissionRequestPage";
+import AdmissionPage from "./pages/dashboard/AdmissionPage";
 
 export default function App() {
   return (
@@ -21,9 +24,13 @@ export default function App() {
           <Route path="/" element={<LandingLayout />}>
             <Route index element={<LandingPage />} />
           </Route>
+          <Route path="request" element={<RequestLayout />}>
+            <Route path="admission" element={<AdmissionRequestPage />} />
+          </Route>
           <Route path="login" element={<LoginPage />} />
           <Route path="dashboard" element={<DashboardLayout />}>
             <Route index element={<DashboardPage />} />
+            <Route path="admission" element={<AdmissionPage />} />
             <Route path="equipments" element={<EquipmentsLayout />}>
               <Route index element={<EquipmentsPage />} />
               <Route path="request" element={<EquipmentRequestPage />} />

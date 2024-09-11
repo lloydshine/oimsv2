@@ -1,7 +1,5 @@
-// @ts-nocheck
-
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { getEventEquipmentRequest } from "../../lib/equipment";
 import { getEventById } from "../../lib/events";
 import { SchoolEvent, EquipmentRequest } from "../../lib/globals";
@@ -17,7 +15,6 @@ export default function EventPage() {
   const [error, setError] = useState<string | null>(null);
 
   const location = useLocation();
-  const navigate = useNavigate();
   const query = new URLSearchParams(location.search);
   const id = query.get("id");
 
@@ -31,8 +28,8 @@ export default function EventPage() {
           setRequest(request);
         }
         setEvent(event);
-      } catch (err) {
-        setError("Failed to load event.");
+      } catch (error: unknown) {
+        setError(`Failed to load event. ${error}`);
       } finally {
         setLoading(false);
       }
@@ -59,9 +56,8 @@ export default function EventPage() {
         </div>
         <p>{event.description}</p>
         <p className="text-sm text-gray-500">
-          Start: {new Date(event.startTime.seconds * 1000).toLocaleString()}{" "}
-          <br />
-          End: {new Date(event.endTime.seconds * 1000).toLocaleString()}
+          Start: {event.startTime.toDate().toLocaleString()} <br />
+          End: {event.endTime.toDate().toLocaleString()}
         </p>
       </section>
       <section>
@@ -101,7 +97,7 @@ function UserPanel({
   revalidate,
 }: {
   event: SchoolEvent;
-  request: EquipmentRequest;
+  request?: EquipmentRequest | null;
   revalidate: () => void;
 }) {
   return (
@@ -124,24 +120,28 @@ function UserPanel({
       >
         Decline Event
       </button>
-      <button
-        className="px-4 py-2 bg-red-950 text-white rounded-lg"
-        onClick={() => {
-          updateStatus(request.id, "equipmentRequests", "Approved");
-          revalidate();
-        }}
-      >
-        Approve Equipment Request
-      </button>
-      <button
-        className="px-4 py-2 bg-red-950 text-white rounded-lg"
-        onClick={() => {
-          updateStatus(request.id, "equipmentRequests", "Declined");
-          revalidate();
-        }}
-      >
-        Decline Equipment Request
-      </button>
+      {request && (
+        <>
+          <button
+            className="px-4 py-2 bg-red-950 text-white rounded-lg"
+            onClick={() => {
+              updateStatus(request.id, "equipmentRequests", "Approved");
+              revalidate();
+            }}
+          >
+            Approve Equipment Request
+          </button>
+          <button
+            className="px-4 py-2 bg-red-950 text-white rounded-lg"
+            onClick={() => {
+              updateStatus(request.id, "equipmentRequests", "Declined");
+              revalidate();
+            }}
+          >
+            Decline Equipment Request
+          </button>
+        </>
+      )}
       <button
         className="px-4 py-2 bg-red-950 text-white rounded-lg"
         onClick={() => {

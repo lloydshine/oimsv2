@@ -63,8 +63,8 @@ export interface SchoolEvent {
   name: string;
   description: string;
   departmentId: string | null;
-  startTime: Date;
-  endTime: Date;
+  startTime: Timestamp;
+  endTime: Timestamp;
   status: string;
   requestId: string;
 }
