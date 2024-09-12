@@ -93,7 +93,13 @@ export interface Student {
 export interface Admission {
   id: string;
   studentId: string;
-  fileUrls: [type: string, imageUrl: string];
+  admissionNumber: string;
+  fileUrls: string[];
   status: string;
-  dateSubmitted: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  email: string;
+  contactNumber: string;
+  dateSubmitted: Timestamp;
 }

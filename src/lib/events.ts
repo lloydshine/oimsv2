@@ -123,3 +123,18 @@ export const getDepartmentEvents = async (
     return [];
   }
 };
+
+export const getActiveEvents = async () => {
+  try {
+    const eventsRef = collection(db, "events");
+    const q = query(eventsRef, where("status", "==", "Approved"));
+    const querySnapshot = await getDocs(q);
+    const activeEvents = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return activeEvents as SchoolEvent[];
+  } catch (error) {
+    return [];
+  }
+};

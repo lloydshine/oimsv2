@@ -9,7 +9,7 @@ export default function AdmissionRequestPage() {
   if (admissionNumber !== "1" && admissionNumber !== "2") return;
 
   return (
-    <main className="w-full">
+    <main>
       <AdmissionForm admissionNumber={admissionNumber} />
     </main>
   );

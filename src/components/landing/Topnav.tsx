@@ -9,10 +9,10 @@ export function Topnav() {
       </Link>
       <div className="md:flex items-center gap-12 flex-1 justify-center hidden">
         <Link to={"/admission"}>Admission</Link>
-        <Link to={"/"}>Events</Link>
-        <Link to={"/"}>Career</Link>
-        <Link to={"/"}>Equipments</Link>
-        <Link to={"/"}>Certificates</Link>
+        <Link to={"/events"}>Events</Link>
+        <Link to={"/career"}>Career</Link>
+        <Link to={"/equipments"}>Equipments</Link>
+        <Link to={"/certificates"}>Certificates</Link>
       </div>
       <div className="flex-1 flex justify-end">
         <button className="px-6 py-2 rounded-md bg-white text-red-950">
