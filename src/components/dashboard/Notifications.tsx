@@ -41,7 +41,7 @@ export function Notifications() {
         )}
       </div>
       {open && (
-        <div className="absolute z-40 top-[4rem] right-0 w-[20rem] border-2 bg-slate-100 rounded-lg shadow-lg p-4">
+        <div className="absolute z-40 top-[4rem] right-[-80px] md:right-0 w-[20rem] border-2 bg-slate-100 rounded-lg shadow-lg p-4">
           <div className="flex flex-col space-y-2">
             {notifications.map((notification) => (
               <div
