@@ -32,7 +32,7 @@ export default function AdmissionLandingPage() {
               to="/request/admission?no=1"
               className="bg-red-950 text-white px-4 py-2 rounded-lg inline-block font-semibold"
             >
-              Admission 2
+              Admission 1
             </Link>
           </div>
         </div>
@@ -49,7 +49,7 @@ export default function AdmissionLandingPage() {
               to="/request/admission?no=2"
               className="bg-red-950 text-white px-4 py-2 rounded-lg inline-block font-semibold"
             >
-              Admission 1
+              Admission 2
             </Link>
           </div>
         </div>
