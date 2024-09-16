@@ -39,6 +39,9 @@ export function DepartmentForm({
   });
   const [loading, setLoading] = useState(false);
   const onSubmit = async (data: DepartmentFormData) => {
+    console.log(data);
+    revalidate();
+    toggleModdal();
     setLoading(true);
   };
   return (
