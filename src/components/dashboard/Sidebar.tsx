@@ -30,7 +30,7 @@ export function Sidebar({ open }: { open: boolean }) {
         className={`${position} z-40 fixed md:static transition-all duration-300 w-[18rem] border-r-2 h-screen md:h-auto max-h-screen overflow-y-auto gap-8 flex flex-col bg-white`}
       >
         {account.accountType == "User" ? <UserPanel /> : <DepartmentPanel />}
-        <div className="w-full p-5 md:mt-auto">
+        <div className="w-full p-5 mt-auto">
           <button
             onClick={() => auth.signOut()}
             className="w-full border-2 border-red-950 text-red-950 rounded-lg p-1 hover:bg-red-950 hover:text-white transition-colors"
@@ -134,9 +134,9 @@ export function UserPanel() {
           <p>Certificates</p>
         </Link>
         <Link
-          to="/dashboard/department"
+          to="/dashboard/departments"
           className={`p-4 flex items-center gap-4 hover:bg-gray-100 ${
-            isActiveLink(currentPath, "/dashboard/department")
+            isActiveLink(currentPath, "/dashboard/departments")
               ? "text-red-950 font-semibold"
               : ""
           }`}

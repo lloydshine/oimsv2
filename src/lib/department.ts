@@ -1,6 +1,7 @@
 import { collection, getDocs } from "firebase/firestore";
 import { Department } from "./globals";
 import { db } from "./firebase";
+import { useCallback, useEffect, useState } from "react";
 
 export const getDepartments = async (): Promise<Department[]> => {
   try {
@@ -15,3 +16,21 @@ export const getDepartments = async (): Promise<Department[]> => {
     return [];
   }
 };
+
+export function useDepartment() {
+  const [departments, setDepartments] = useState<Department[]>([]);
+
+  const fetchDepartments = useCallback(async () => {
+    const departments = await getDepartments();
+    setDepartments(departments);
+  }, []);
+
+  useEffect(() => {
+    fetchDepartments();
+  }, []);
+
+  return {
+    departments,
+    fetchDepartments,
+  };
+}

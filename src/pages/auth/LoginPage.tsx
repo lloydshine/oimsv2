@@ -1,4 +1,6 @@
+import { signInWithPopup } from "firebase/auth";
 import { LoginForm } from "../../forms/LoginForm";
+import { auth, provider } from "../../lib/firebase";
 
 export default function LoginPage() {
   return (
@@ -6,6 +8,9 @@ export default function LoginPage() {
       <div className="md:w-[40rem] w-full md:p-20 p-10 flex flex-col items-center gap-10 justify-center">
         <img src="/logo.png" alt="logo" className="h-[10rem]" />
         <LoginForm />
+        <button onClick={() => signInWithPopup(auth, provider)}>
+          Sign in with Google
+        </button>
       </div>
       <div
         className="flex-1 bg-red-950 hidden md:flex bg-bottom bg-cover"

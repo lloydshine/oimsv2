@@ -7,6 +7,7 @@ import { useDepartment } from "../../providers/DepartmentProvider";
 import { useEffect, useState } from "react";
 import { getDepartmentEvents, getEvents } from "../../lib/events";
 import EventPage from "./EventPage";
+import { auth } from "../../lib/firebase";
 
 export default function EventsPage() {
   const { account } = useAccount();
@@ -53,11 +54,15 @@ function DepartmentEvents() {
 function UserEvents() {
   //const { user } = useUser();
   const [events, setEvents] = useState<SchoolEvent[]>([]);
+  const user = auth.currentUser;
+  console.log(user);
 
   useEffect(() => {
     const fetchEvents = async () => {
       const events = await getEvents();
       setEvents(events);
+
+      console.log(await user?.getIdToken());
     };
     fetchEvents();
   }, []);
@@ -71,6 +76,10 @@ function UserEvents() {
           <EventCard event={event} key={event.id} />
         ))}
       </section>
+      <iframe
+        src="https://calendar.google.com/calendar/embed?src=2e2cb7d4edcd3965c29b36abe0b2156cdd0740b91e4ceef8e341b8f5b83e45ea%40group.calendar.google.com&ctz=UTC"
+        className="w-full h-[60vh]"
+      ></iframe>
     </main>
   );
 }
