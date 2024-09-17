@@ -1,8 +1,10 @@
 import {
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   signInWithEmailAndPassword,
+  signInWithPopup,
 } from "firebase/auth";
-import { auth, db } from "./firebase";
+import { auth, db, provider } from "./firebase";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { User } from "./globals";
 
@@ -73,5 +75,23 @@ export const getUser = async (id: string): Promise<User | null> => {
     // Handle any errors
     console.error("Error fetching user:", e);
     return null;
+  }
+};
+
+export const signInWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    // Extract the Google OAuth 2.0 credential
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    if (credential) {
+      const token = credential.accessToken; // This is the OAuth 2.0 token
+      console.log("Google OAuth Token:", token);
+      return token; // Return this token for Calendar API requests
+    } else {
+      console.error("No credential found");
+      return null;
+    }
+  } catch (error) {
+    console.error("Google login failed:", error);
   }
 };

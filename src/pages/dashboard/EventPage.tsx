@@ -7,6 +7,7 @@ import { StatusBadge } from "../../components/StatusBadge";
 import { RequestedEquipmentCard } from "../../components/dashboard/equipments/RequestedEquipmentCard";
 import { updateStatus } from "../../lib/firebase";
 import { useAccount } from "../../providers/AccountProvider";
+import { createCalendarEvent } from "../../lib/calendar";
 
 export default function EventPage() {
   const [event, setEvent] = useState<SchoolEvent | null>(null);
@@ -108,6 +109,7 @@ function UserPanel({
         className="px-4 py-2 bg-red-950 text-white rounded-lg"
         onClick={() => {
           updateStatus(event.id, "events", "Approved");
+          createCalendarEvent(event);
           revalidate();
         }}
       >
