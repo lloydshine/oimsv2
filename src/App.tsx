@@ -18,6 +18,7 @@ import AdmissionLandingPage from "./pages/landing/AdmissionLandingPage";
 import EventsLandingPage from "./pages/landing/EventsLandingPage";
 import EquipmentsLandingPage from "./pages/landing/EquipmentsLandingPage";
 import DepartmentsPage from "./pages/dashboard/DepartmentsPage";
+import StudentsPage from "./pages/dashboard/StudentsPage";
 
 export default function App() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
             <Route index element={<DashboardPage />} />
             <Route path="admission" element={<AdmissionPage />} />
             <Route path="departments" element={<DepartmentsPage />} />
+            <Route path="students" element={<StudentsPage />} />
             <Route path="equipments" element={<EquipmentsLayout />}>
               <Route index element={<EquipmentsPage />} />
               <Route path="request" element={<EquipmentRequestPage />} />
