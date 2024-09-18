@@ -43,6 +43,7 @@ export const DepartmentProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   if (loading) return <LoadingPage />;
+
   if (!department) return;
 
   return (

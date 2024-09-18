@@ -3,58 +3,39 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import toast from "react-hot-toast";
-import { createEvent, updateEvent, deleteEvent } from "../lib/events";
-import { Department, SchoolEvent } from "../lib/globals";
+import { createProgram, updateProgram, deleteProgram } from "../lib/program";
+import { Department, Program } from "../lib/globals"; // Assuming you have these types
 import { useNavigate } from "react-router-dom";
 import { getDepartments } from "../lib/department";
 import { Loader } from "lucide-react";
 
-// Define the schema for event validation
-const schema = z
-  .object({
-    name: z.string().min(3, "Event name must be at least 3 characters long"),
-    description: z
-      .string()
-      .min(10, "Description must be at least 10 characters long"),
-    departmentId: z.string().nullable(),
-    startTime: z.date().refine((date) => date > new Date(), {
-      message: "Start time must be in the future",
-    }),
-    endTime: z.date(),
-  })
-  .superRefine((data, ctx) => {
-    if (data.endTime <= data.startTime) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "End time must be after the start time",
-        path: ["endTime"], // Focus the error on the endTime field
-      });
-    }
-  });
+// Define the schema for program validation
+const schema = z.object({
+  name: z.string().min(3, "Program name must be at least 3 characters long"),
+  shortName: z.string().min(2, "Short name must be at least 2 characters long"),
+  departmentId: z.string().nullable(),
+});
 
-export type EventFormData = z.infer<typeof schema>;
+export type ProgramFormData = z.infer<typeof schema>;
 
-export function EventForm({
-  event,
+export function ProgramForm({
+  program,
   defaultDepartmentId,
 }: {
-  event?: SchoolEvent | null;
-  defaultDepartmentId?: string; // Optional prop for default department ID
+  program?: Program | null;
+  defaultDepartmentId?: string;
 }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
-    reset, // Added reset
-  } = useForm<EventFormData>({
+    reset,
+  } = useForm<ProgramFormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: event?.name || "",
-      description: event?.description || "",
-      departmentId: defaultDepartmentId || event?.departmentId || null,
-      startTime: event?.startTime ? event.startTime.toDate() : undefined,
-      endTime: event?.endTime ? event.endTime.toDate() : undefined,
+      name: program?.name || "",
+      shortName: program?.shortName || "",
+      departmentId: defaultDepartmentId || program?.departmentId || null,
     },
   });
 
@@ -65,20 +46,12 @@ export function EventForm({
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (defaultDepartmentId) {
-      setValue("departmentId", defaultDepartmentId);
-    }
-  }, []);
-
-  useEffect(() => {
     reset({
-      name: event?.name || "",
-      description: event?.description || "",
-      departmentId: defaultDepartmentId || event?.departmentId || null,
-      startTime: event?.startTime ? event.startTime.toDate() : undefined,
-      endTime: event?.endTime ? event.endTime.toDate() : undefined,
+      name: program?.name || "",
+      shortName: program?.shortName || "",
+      departmentId: defaultDepartmentId || program?.departmentId || null,
     });
-  }, [event, reset]);
+  }, [program, reset]);
 
   useEffect(() => {
     const fetchDepartments = async () => {
@@ -89,18 +62,17 @@ export function EventForm({
     fetchDepartments();
   }, []);
 
-  const onSubmit = async (data: EventFormData) => {
+  const onSubmit = async (data: ProgramFormData) => {
     setLoading(true);
-
     try {
-      if (event) {
-        await updateEvent(event.id, data);
-        toast.success("Event successfully updated.");
+      if (program) {
+        await updateProgram(program.id, data);
+        toast.success("Program successfully updated.");
       } else {
-        await createEvent(data);
-        toast.success("Event successfully created.");
+        await createProgram(data);
+        toast.success("Program successfully created.");
       }
-      navigate("/dashboard/events");
+      navigate("/dashboard/programs");
     } catch (error) {
       console.error("Error handling submission:", error);
       toast.error("Error occurred. Please try again.");
@@ -111,16 +83,16 @@ export function EventForm({
 
   const handleDelete = (e: any) => {
     e.preventDefault();
-    if (!event) return;
+    if (!program) return;
     setDeleting(true);
     toast
-      .promise(deleteEvent(event.id), {
+      .promise(deleteProgram(program.id), {
         loading: "Deleting...",
         success: <b>Delete successful!</b>,
         error: <b>Delete failed. Please try again.</b>,
       })
       .then(() => {
-        navigate("/dashboard/events");
+        navigate("/dashboard/programs");
       })
       .catch((error) => {
         console.error("Toast error:", error);
@@ -141,41 +113,40 @@ export function EventForm({
     <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-3">
       <div className="flex flex-col space-y-2">
         <label htmlFor="name" className="text-gray-500 text-sm">
-          Event Name
+          Program Name
         </label>
         <input
           {...register("name")}
           id="name"
           type="text"
-          placeholder="Event Name"
+          placeholder="Program Name"
           className="p-2 border border-gray-300 rounded-lg"
         />
         {errors.name && <p>{errors.name.message}</p>}
       </div>
 
       <div className="flex flex-col space-y-2">
-        <label htmlFor="description" className="text-gray-500 text-sm">
-          Description
+        <label htmlFor="shortName" className="text-gray-500 text-sm">
+          Short Name
         </label>
-        <textarea
-          {...register("description")}
-          id="description"
-          placeholder="Description"
+        <input
+          {...register("shortName")}
+          id="shortName"
+          type="text"
+          placeholder="Short Name"
           className="p-2 border border-gray-300 rounded-lg"
         />
-        {errors.description && <p>{errors.description.message}</p>}
+        {errors.shortName && <p>{errors.shortName.message}</p>}
       </div>
 
-      {/* Change departmentId to a select field */}
       <div className="flex flex-col space-y-2">
         <label htmlFor="departmentId" className="text-gray-500 text-sm">
-          Department (Optional)
+          Department
         </label>
         <select
           {...register("departmentId")}
           id="departmentId"
           className="p-2 border border-gray-300 rounded-lg"
-          disabled={!!defaultDepartmentId} // Disable if defaultDepartmentId is provided
         >
           <option value="">Select a department</option>
           {departments.map((department) => (
@@ -187,34 +158,8 @@ export function EventForm({
         {errors.departmentId && <p>{errors.departmentId.message}</p>}
       </div>
 
-      <div className="flex flex-col space-y-2">
-        <label htmlFor="startTime" className="text-gray-500 text-sm">
-          Start Time
-        </label>
-        <input
-          {...register("startTime", { valueAsDate: true })}
-          id="startTime"
-          type="datetime-local"
-          className="p-2 border border-gray-300 rounded-lg"
-        />
-        {errors.startTime && <p>{errors.startTime.message}</p>}
-      </div>
-
-      <div className="flex flex-col space-y-2">
-        <label htmlFor="endTime" className="text-gray-500 text-sm">
-          End Time
-        </label>
-        <input
-          {...register("endTime", { valueAsDate: true })}
-          id="endTime"
-          type="datetime-local"
-          className="p-2 border border-gray-300 rounded-lg"
-        />
-        {errors.endTime && <p>{errors.endTime.message}</p>}
-      </div>
-
       <div className="flex items-center justify-end gap-4">
-        {event && (
+        {program && (
           <button
             className="border-red-600 text-red-600 border-2 px-6 py-2 rounded-lg"
             onClick={handleDelete}
@@ -229,10 +174,10 @@ export function EventForm({
           disabled={loading}
         >
           {loading
-            ? event
+            ? program
               ? "Updating..."
               : "Creating..."
-            : event
+            : program
             ? "Update"
             : "Create"}
         </button>

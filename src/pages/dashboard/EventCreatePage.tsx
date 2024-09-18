@@ -4,8 +4,9 @@ import { useDepartment } from "../../providers/DepartmentProvider";
 
 export default function EventCreatePage() {
   const { account } = useAccount();
+
   if (account.accountType === "Department") {
-    <DepartmentCreateEvent />
+    return <DepartmentCreateEvent />;
   } else {
     return <EventForm />;
   }

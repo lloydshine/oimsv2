@@ -30,6 +30,13 @@ export interface Department {
   color: string;
 }
 
+export interface Program {
+  id: string;
+  name: string;
+  shortName: string;
+  departmentId: string;
+}
+
 export interface Account {
   id: string;
   onBoarded: boolean;
@@ -80,6 +87,7 @@ export interface SchoolEvent {
 }
 
 export interface Student {
+  id: string;
   studentId: string;
   firstName: string;
   middleName: string;
@@ -88,6 +96,7 @@ export interface Student {
   contactNumber: string;
   departmentId: string;
   programId: string;
+  yearLevel: string;
 }
 
 export interface Admission {
