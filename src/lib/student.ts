@@ -3,7 +3,6 @@ import {
   collection,
   deleteDoc,
   doc,
-  getDoc,
   getDocs,
   query,
   serverTimestamp,
@@ -12,6 +11,7 @@ import {
 import { db } from "./firebase";
 import { Student } from "./globals"; // Assume you have a Student type defined similarly to SchoolEvent
 import { StudentFormData } from "../forms/StudentForm";
+import { useCallback, useEffect, useState } from "react";
 
 // Function to get all students
 export const getStudents = async (): Promise<Student[]> => {
@@ -29,20 +29,24 @@ export const getStudents = async (): Promise<Student[]> => {
 };
 
 // Function to get a student by ID
-export const getStudentById = async (id: string): Promise<Student | null> => {
+export const getStudentByStudentId = async (
+  studentId: string
+): Promise<Student | null> => {
   try {
-    const studentRef = doc(db, "students", id);
-    const docSnap = await getDoc(studentRef);
+    const studentsRef = collection(db, "students");
+    const q = query(studentsRef, where("studentId", "==", studentId));
+    const querySnapshot = await getDocs(q);
 
-    if (docSnap.exists()) {
-      return { id: docSnap.id, ...docSnap.data() } as Student;
+    if (!querySnapshot.empty) {
+      const studentDoc = querySnapshot.docs[0]; // Assuming you want the first match
+      return { id: studentDoc.id, ...studentDoc.data() } as Student;
     } else {
-      console.log("No such student found!");
+      console.log("No student found with the provided studentId!");
       return null;
     }
   } catch (error) {
-    console.error("Error fetching student by ID:", error);
-    throw error;
+    console.error("Error fetching student by studentId:", error);
+    return null;
   }
 };
 
@@ -95,3 +99,38 @@ export const deleteStudent = async (id: string): Promise<void> => {
     throw error;
   }
 };
+
+export function useStudents(departmentId?: string) {
+  const [students, setStudents] = useState<Student[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const fetchStudents = useCallback(async () => {
+    setLoading(true);
+    try {
+      let fetchedStudents: Student[] = [];
+
+      // Fetch students by department or all students
+      if (departmentId) {
+        fetchedStudents = await getStudentsByDepartment(departmentId);
+      } else {
+        fetchedStudents = await getStudents();
+      }
+
+      setStudents(fetchedStudents);
+    } catch (error) {
+      console.error("Error fetching students:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [departmentId]);
+
+  useEffect(() => {
+    fetchStudents();
+  }, [fetchStudents]);
+
+  return {
+    students,
+    loading,
+    fetchStudents,
+  };
+}

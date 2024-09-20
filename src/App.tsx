@@ -19,6 +19,9 @@ import EventsLandingPage from "./pages/landing/EventsLandingPage";
 import EquipmentsLandingPage from "./pages/landing/EquipmentsLandingPage";
 import DepartmentsPage from "./pages/dashboard/DepartmentsPage";
 import StudentsPage from "./pages/dashboard/StudentsPage";
+import CertificateRequestPage from "./pages/request/CertificateRequestPage";
+import CertificateLandingPage from "./pages/landing/CertificateLandingPage";
+import CertificatesPage from "./pages/dashboard/CertificatesPage";
 
 export default function App() {
   return (
@@ -31,15 +34,18 @@ export default function App() {
             <Route path="admission" element={<AdmissionLandingPage />} />
             <Route path="events" element={<EventsLandingPage />} />
             <Route path="equipments" element={<EquipmentsLandingPage />} />
+            <Route path="certificates" element={<CertificateLandingPage />} />
           </Route>
           <Route path="request" element={<RequestLayout />}>
             <Route path="admission" element={<AdmissionRequestPage />} />
+            <Route path="certificate" element={<CertificateRequestPage />} />
           </Route>
           <Route path="login" element={<LoginPage />} />
           <Route path="dashboard" element={<DashboardLayout />}>
             <Route index element={<DashboardPage />} />
             <Route path="admission" element={<AdmissionPage />} />
             <Route path="departments" element={<DepartmentsPage />} />
+            <Route path="certificates" element={<CertificatesPage />} />
             <Route path="students" element={<StudentsPage />} />
             <Route path="equipments" element={<EquipmentsLayout />}>
               <Route index element={<EquipmentsPage />} />

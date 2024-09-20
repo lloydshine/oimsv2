@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useDepartment } from "../../lib/department";
+import { useDepartments } from "../../lib/department";
 import { Modal } from "../../components/Modal";
 import { DepartmentForm } from "../../forms/DepartmentForm";
 
 export default function DepartmentsPage() {
-  const { departments, fetchDepartments } = useDepartment();
+  const { departments, fetchDepartments } = useDepartments();
   const [open, setOpen] = useState(false);
 
   const toggleModal = () => {
