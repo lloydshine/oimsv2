@@ -134,3 +134,36 @@ export function useStudents(departmentId?: string) {
     fetchStudents,
   };
 }
+
+export function useStudent(studentId: string) {
+  const [student, setStudent] = useState<Student | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchStudent = useCallback(async () => {
+    if (!studentId) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const fetchedStudent = await getStudentByStudentId(studentId);
+      if (fetchedStudent) {
+        setStudent(fetchedStudent);
+      } else {
+        setError("Student not found");
+      }
+    } catch (err) {
+      console.error("Error fetching student:", err);
+      setError("Error fetching student");
+    } finally {
+      setLoading(false);
+    }
+  }, [studentId]);
+
+  useEffect(() => {
+    fetchStudent();
+  }, [fetchStudent]);
+
+  return { student, loading, error, fetchStudent };
+}

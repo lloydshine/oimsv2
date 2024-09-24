@@ -6,6 +6,7 @@ import { useState } from "react";
 import { getStudentByStudentId } from "../lib/student";
 import { StudentInfo } from "../components/request/StudentInfo";
 import { Student } from "../lib/globals";
+import { certificates, createCertificateRequest } from "../lib/certificate";
 
 // Schema for certificate form
 const schema = z.object({
@@ -33,12 +34,13 @@ export default function CertificateForm() {
 
   const [studentInfo, setStudentInfo] = useState<Student | null>(null);
   const [loading, setLoading] = useState(false);
+  const [purposes, setPurposes] = useState<string[]>([]);
 
   const onSubmit = async (data: CertificateFormData) => {
     setLoading(true);
     try {
       // Submit form data (handle certificate request submission)
-      console.log("Form submitted", data);
+      await createCertificateRequest(data);
       toast.success("Certificate request submitted!");
     } catch (error) {
       toast.error("Failed to submit certificate request");
@@ -52,7 +54,7 @@ export default function CertificateForm() {
   ) => {
     const studentId = e.target.value;
     setValue("studentId", studentId);
-    if (studentId.length == 9) {
+    if (studentId.length === 9) {
       // Fetch and display student info based on ID
       try {
         const info = await getStudentByStudentId(studentId);
@@ -62,6 +64,17 @@ export default function CertificateForm() {
       }
     } else {
       setStudentInfo(null); // Clear if no ID is entered
+    }
+  };
+
+  const handleCertificateTypeChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedType = e.target.value;
+    const certificate = certificates.find((c) => c.name === selectedType);
+    if (certificate) {
+      setPurposes(certificate.purposes); // Update purposes based on selected certificate type
+      setValue("purpose", ""); // Reset purpose when certificate type changes
     }
   };
 
@@ -99,13 +112,19 @@ export default function CertificateForm() {
               >
                 Certificate Type
               </label>
-              <input
+              <select
                 {...register("certificateType")}
                 id="certificateType"
-                type="text"
-                placeholder="Enter Certificate Type"
                 className="p-2 border border-gray-300 rounded-lg"
-              />
+                onChange={handleCertificateTypeChange}
+              >
+                <option value="">Select a type</option>
+                {certificates.map((certificate, i) => (
+                  <option key={i} value={certificate.name}>
+                    {certificate.name}
+                  </option>
+                ))}
+              </select>
               {errors.certificateType && (
                 <p className="text-red-600">{errors.certificateType.message}</p>
               )}
@@ -116,12 +135,19 @@ export default function CertificateForm() {
               <label htmlFor="purpose" className="text-gray-500 text-sm">
                 Purpose
               </label>
-              <textarea
+              <select
                 {...register("purpose")}
                 id="purpose"
-                placeholder="Enter Purpose"
                 className="p-2 border border-gray-300 rounded-lg"
-              />
+                disabled={purposes.length === 0}
+              >
+                <option value="">Select a purpose</option>
+                {purposes.map((purpose, i) => (
+                  <option key={i} value={purpose}>
+                    {purpose}
+                  </option>
+                ))}
+              </select>
               {errors.purpose && (
                 <p className="text-red-600">{errors.purpose.message}</p>
               )}

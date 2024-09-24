@@ -112,3 +112,11 @@ export interface Admission {
   contactNumber: string;
   dateSubmitted: Timestamp;
 }
+
+export interface CertificateRequest {
+  id: string;
+  studentId: string;
+  certificateType: string;
+  purpose: string;
+  dateRequested: Timestamp;
+}
