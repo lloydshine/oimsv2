@@ -16,6 +16,7 @@ const schema = z
     description: z
       .string()
       .min(10, "Description must be at least 10 characters long"),
+    venue: z.string().min(3, "Event venue must be at least 3 characters long"),
     departmentId: z.string().nullable(),
     startTime: z.date().refine((date) => date > new Date(), {
       message: "Start time must be in the future",
@@ -164,6 +165,20 @@ export function EventForm({
           className="p-2 border border-gray-300 rounded-lg"
         />
         {errors.description && <p>{errors.description.message}</p>}
+      </div>
+
+      <div className="flex flex-col space-y-2">
+        <label htmlFor="venue" className="text-gray-500 text-sm">
+          Event Venue
+        </label>
+        <input
+          {...register("venue")}
+          id="venue"
+          type="text"
+          placeholder="Event Venue"
+          className="p-2 border border-gray-300 rounded-lg"
+        />
+        {errors.venue && <p>{errors.venue.message}</p>}
       </div>
 
       {/* Change departmentId to a select field */}

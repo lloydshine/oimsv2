@@ -80,6 +80,7 @@ export interface SchoolEvent {
   name: string;
   description: string;
   departmentId: string | null;
+  venue: string;
   startTime: Timestamp;
   endTime: Timestamp;
   status: string;

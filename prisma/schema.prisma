@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// prisma/schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // uncomment next line if you use Prisma <5.10
+  // directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+enum UserRole {
+  ADMIN
+  ASSISTANT
+}
+
+enum Status {
+  Approved
+  Pending
+  Declined
+}
+
+enum Office {
+  OSAS
+  GUIDANCE
+}
+
+model Department {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  shortName String    @unique
+  Borrow    Borrow[]
+  Program   Program[]
+}
+
+model Program {
+  id           String     @id @default(uuid())
+  name         String     @unique
+  shortName    String     @unique
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id])
+}
+
+model User {
+  id             String    @id @default(uuid())
+  username       String    @unique
+  password       String
+  role           UserRole
+  assignedOffice Office
+  firstName      String
+  middleName     String
+  lastName       String
+  contactNumber  String
+  email          String
+  sessions       Session[]
+}
+
+model Session {
+  id        String   @id
+  userId    String
+  expiresAt DateTime
+
+  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model Equipment {
+  id              String            @id @default(uuid())
+  name            String
+  brand           String
+  price           Int
+  quantity        Int
+  isAvailable     Boolean           @default(false)
+  imageUrl        String?
+  BorrowEquipment BorrowEquipment[]
+  dateAdded       DateTime          @default(now())
+}
+
+model Borrow {
+  id               String            @id @default(uuid())
+  borrower         String
+  department       Department        @relation(fields: [departmentId], references: [id])
+  event            String
+  dateRequested    DateTime          @default(now())
+  dateReturned     DateTime?
+  dateToBeReturned DateTime?
+  dateClaimed      DateTime?
+  status           Status            @default(Pending)
+  BorrowEquipment  BorrowEquipment[]
+  departmentId     String
+}
+
+model BorrowEquipment {
+  id          String    @id @default(uuid())
+  borrowId    String
+  equipmentId String
+  returned    Boolean   @default(false)
+  quantity    Int // Number of equipment items borrowed
+  borrow      Borrow    @relation(fields: [borrowId], references: [id])
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+
+  @@unique([borrowId, equipmentId]) // Ensure a specific equipment is not duplicated in the same borrow
+}

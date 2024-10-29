@@ -8,9 +8,7 @@ import LoginPage from "./pages/auth/LoginPage";
 import EquipmentsPage from "./pages/dashboard/EquipmentsPage";
 import EventsPage from "./pages/dashboard/EventsPage";
 import EventCreatePage from "./pages/dashboard/EventCreatePage";
-import EventsLayout from "./layouts/EventsLayout";
 import EquipmentRequestPage from "./pages/request/EquipmentRequestPage";
-import EquipmentsLayout from "./layouts/EquipmentsLayout";
 import RequestLayout from "./layouts/RequestLayout";
 import AdmissionRequestPage from "./pages/request/AdmissionRequestPage";
 import AdmissionPage from "./pages/dashboard/AdmissionPage";
@@ -47,14 +45,13 @@ export default function App() {
             <Route path="departments" element={<DepartmentsPage />} />
             <Route path="certificates" element={<CertificatesPage />} />
             <Route path="students" element={<StudentsPage />} />
-            <Route path="equipments" element={<EquipmentsLayout />}>
-              <Route index element={<EquipmentsPage />} />
-              <Route path="request" element={<EquipmentRequestPage />} />
-            </Route>
-            <Route path="events" element={<EventsLayout />}>
-              <Route index element={<EventsPage />} />
-              <Route path="create" element={<EventCreatePage />} />
-            </Route>
+            <Route path="equipments" element={<EquipmentsPage />} />
+            <Route
+              path="equipments/request"
+              element={<EquipmentRequestPage />}
+            />
+            <Route path="events" element={<EventsPage />} />
+            <Route path="events/create" element={<EventCreatePage />} />
           </Route>
         </Routes>
       </HashRouter>
